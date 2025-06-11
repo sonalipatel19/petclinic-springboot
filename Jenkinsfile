@@ -15,5 +15,17 @@ pipeline {
                 sh "mvn compile"
             }
         }
+        stage('Maven Test') {
+            steps {
+                echo "This is Maven Test stage"
+                sh "mvn test"
+            }
+        }
+        stage('File Scanning by Trivy') {
+            steps {
+                echo "This is Trivy Scanning stage"
+                sh "trivy fs --format table --output trivy-report.txt --severity HIGH, CRITICAL ."
+            }
+        }
     }
 }

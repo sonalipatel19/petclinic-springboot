@@ -32,7 +32,9 @@ pipeline {
         stage('File Scanning by Trivy') {
             steps {
                 echo "This is Trivy Scanning stage"
-                bat "trivy.exe fs --format table --output trivy-report.txt --severity HIGH,CRITICAL ."
+                bat '''
+                .\\trivy.exe fs --format table --output trivy-report.txt --severity HIGH,CRITICAL .
+                '''
             }
         }
     }

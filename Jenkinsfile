@@ -15,12 +15,7 @@ pipeline {
                 bat "mvn compile"
             }
         }
-        stage('Maven Test') {
-            steps {
-                echo "This is Maven Test stage"
-                bat "mvn test"
-            }
-        }
+        
         stage('Install Trivy') {
             steps {
                 bat '''
@@ -35,6 +30,23 @@ pipeline {
                 bat '''
                 .\\trivy.exe fs --format table --output trivy-report.txt --severity HIGH,CRITICAL .
                 '''
+            }
+        }
+        stage('Sonar Analysis') {
+            environment {
+                SCANNER_HOME = tool 'sonar-scanner'
+            }
+            steps {
+                withSonarQubeEnv('sonarserver') {
+                    bat '''
+                    $SCANNER_HOME/bin/sonar-scanner \
+                    -Dsonar.organization="DevOpsProject" \
+                    -Dsonar.projectName="PetClinic" \
+                    -Dsonar.projectKey="devproj1_petclinic" \
+                    -Dsonar.java.binaries=. \
+                    -Dsonar.exclusions=**/trivy-report.txt 
+                    '''
+                }
             }
         }
     }

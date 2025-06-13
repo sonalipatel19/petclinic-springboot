@@ -39,12 +39,12 @@ pipeline {
             steps {
                 withSonarQubeEnv('sonarserver') {
                     bat '''
-                    $SCANNER_HOME/bin/sonar-scanner \
-                    -Dsonar.organization="DevOpsProject" \
-                    -Dsonar.projectName="PetClinic" \
-                    -Dsonar.projectKey="devproj1_petclinic" \
-                    -Dsonar.java.binaries=. \
-                    -Dsonar.exclusions=**/trivy-report.txt 
+                    %SCANNER_HOME%\\bin\\sonar-scanner ^
+                    -Dsonar.organization="DevOpsProject" ^
+                    -Dsonar.projectName="PetClinic" ^
+                    -Dsonar.projectKey="devproj1_petclinic" ^
+                    -Dsonar.java.binaries=. ^
+                    -Dsonar.exclusions=**/trivy-report.txt
                     '''
                 }
             }

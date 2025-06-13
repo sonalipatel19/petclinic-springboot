@@ -23,13 +23,16 @@ pipeline {
         }
         stage('Install Trivy') {
             steps {
-                bat 'curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin'
+                bat '''
+                curl -L -o trivy.zip https://github.com/aquasecurity/trivy/releases/latest/download/trivy_0.50.1_Windows-64bit.zip
+                powershell -Command "Expand-Archive -Force trivy.zip ."
+                '''
             }
         }
         stage('File Scanning by Trivy') {
             steps {
                 echo "This is Trivy Scanning stage"
-                bat "trivy fs --format table --output trivy-report.txt --severity HIGH,CRITICAL ."
+                bat "trivy.exe fs --format table --output trivy-report.txt --severity HIGH,CRITICAL ."
             }
         }
     }

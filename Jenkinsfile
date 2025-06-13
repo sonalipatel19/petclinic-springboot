@@ -12,24 +12,24 @@ pipeline {
         stage('Maven Compile') {
             steps {
                 echo "This is Maven Compile stage"
-                sh "mvn compile"
+                bat "mvn compile"
             }
         }
         stage('Maven Test') {
             steps {
                 echo "This is Maven Test stage"
-                sh "mvn test"
+                bat "mvn test"
             }
         }
         stage('Install Trivy') {
             steps {
-                sh 'curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin'
+                bat 'curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin'
             }
         }
         stage('File Scanning by Trivy') {
             steps {
                 echo "This is Trivy Scanning stage"
-                sh "trivy fs --format table --output trivy-report.txt --severity HIGH,CRITICAL ."
+                bat "trivy fs --format table --output trivy-report.txt --severity HIGH,CRITICAL ."
             }
         }
     }

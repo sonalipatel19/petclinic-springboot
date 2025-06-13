@@ -24,7 +24,7 @@ pipeline {
         stage('Install Trivy') {
             steps {
                 bat '''
-                curl -L -o trivy.zip https://github.com/aquasecurity/trivy/releases/latest/download/trivy_0.50.1_Windows-64bit.zip
+                curl -L -o trivy.zip https://github.com/aquasecurity/trivy/releases/download/v0.50.1/trivy_0.50.1_Windows-64bit.zip
                 powershell -Command "Expand-Archive -Path trivy.zip -DestinationPath . -Force"
                 '''
             }

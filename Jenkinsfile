@@ -11,6 +11,8 @@ pipeline {
         ACR_NAME = "petclinicapp"
         ACR_LOGIN_SERVER = "${ACR_NAME}.azurecr.io"
         CONTAINER_IMAGE = "${ACR_LOGIN_SERVER}/${IMAGE_NAME}:${IMAGE_TAG}"
+        RESOURCE_GROUP = "AKS-RG"
+        CLUSTER_NAME = "DEMOAKS"
     }
 
     stages {
@@ -64,5 +66,37 @@ pipeline {
                 }  
             }
         }
+        stage('Jenkins Login to Kubernetes') {
+            steps {
+               withCredentials([
+                    usernamePassword(
+                        credentialsId: 'docker-secret', 
+                        usernameVariable: 'AZURE_USERNAME', 
+                        passwordVariable: 'AZURE_PASSWORD'
+                    )
+                ]) {
+                    script {
+                        sh '''
+                        echo 'Jenkins Login to Azure and Kubernetes'
+                        az login --service-principal -u $AZURE_USERNAME -p $AZURE_PASSWORD --tenant $TENANT_ID
+                        az aks get-credentials --resource_group $RESOURCE_GROUP --name $CLUSTER_NAME --overwrite-existing
+                        '''
+                    }
+                } 
+            }
+        }
+        stage('Deploy to Kubernetes') {
+            steps {
+                script {
+                    echo 'Deploy to Kubernetes'
+                    sh '''
+                    kubectl delete deploy springboot
+                    kubectl apply -f k8s/springboot-deployment.yaml
+                    echo 'Deployed to Kubernetes'
+                    '''
+                }
+            }
+        }
+
     }
 }

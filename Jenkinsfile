@@ -90,13 +90,17 @@ pipeline {
                 script {
                     echo 'Deploy to Kubernetes'
                     sh '''
-                    if kubectl get deployment springbootapp >/dev/null 2>&1; then
+                    if kubectl get deployment springboot-app >/dev/null 2>&1; then
                         echo "Deployment exists, deleting..."
-                        kubectl delete deploy springbootapp
+                        kubectl delete deploy springboot-app
                     else 
                         echo "No existing deployment found, skip deleting."
 
                     fi
+
+                    # Replace placeholder in YAML with actual image tag
+                    sed "s/__IMAGE_TAG__/${IMAGE_TAG}/g" k8s/springboot-deployment.yaml > k8s/springboot-deployment-for-jenkins.yaml
+                    
                     kubectl apply -f k8s/springboot-deployment.yaml
                     echo 'Deployed to Kubernetes successful'
                     '''

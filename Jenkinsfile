@@ -3,6 +3,12 @@ pipeline {
     tools {
       maven 'maven'
     }
+
+    environment {
+        IMAGE_NAME = "petclinic"
+        IMAGE_TAG = "${BUILD_ID}"
+    }
+
     stages {
         stage('Checkout From Git') {
             steps {
@@ -44,6 +50,13 @@ pipeline {
                 sh "mvn package"
             }
         }
-        
+        stage('Docker Build') {
+            steps {
+                script{
+                    echo "Docker Build Started"
+                    docker.build ("$IMAGE_NAME:$IMAGE_TAG")
+                }  
+            }
+        }
     }
 }

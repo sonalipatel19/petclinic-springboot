@@ -90,9 +90,15 @@ pipeline {
                 script {
                     echo 'Deploy to Kubernetes'
                     sh '''
-                    kubectl delete deploy springboot
+                    if kubectl get deployment springbootapp >/dev/null 2>&1; then
+                        echo "Deployment exists, deleting..."
+                        kubectl delete deploy springbootapp
+                    else 
+                        echo "No existing deployment found, skip deleting."
+
+                    fi
                     kubectl apply -f k8s/springboot-deployment.yaml
-                    echo 'Deployed to Kubernetes'
+                    echo 'Deployed to Kubernetes successful'
                     '''
                 }
             }

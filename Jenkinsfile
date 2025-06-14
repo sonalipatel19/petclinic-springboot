@@ -79,7 +79,7 @@ pipeline {
                         sh '''
                         echo 'Jenkins Login to Azure and Kubernetes'
                         az login --service-principal -u $AZURE_USERNAME -p $AZURE_PASSWORD --tenant $TENANT_ID
-                        az aks get-credentials --resource_group $RESOURCE_GROUP --name $CLUSTER_NAME --overwrite-existing
+                        az aks get-credentials --resource-group $RESOURCE_GROUP --name $CLUSTER_NAME --overwrite-existing
                         '''
                     }
                 } 

@@ -101,7 +101,7 @@ pipeline {
                     # Replace placeholder in YAML with actual image tag
                     sed "s/__IMAGE_TAG__/${IMAGE_TAG}/g" k8s/springboot-deployment.yaml > k8s/springboot-deployment-for-jenkins.yaml
 
-                    kubectl apply -f k8s/springboot-deployment.yaml
+                    kubectl apply -f k8s/springboot-deployment-for-jenkins.yaml
                     echo 'Deployed to Kubernetes successfully'
                     '''
                 }
